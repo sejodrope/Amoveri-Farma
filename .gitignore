@@ -1,0 +1,54 @@
+# Dados sensíveis e arquivos grandes
+Base de Dados/
+*.xlsx
+*.xls
+*.csv
+*.parquet
+
+# Credenciais e secrets
+.env
+.env.local
+*.key
+*.pem
+credentials.json
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Power BI
+*.pbix.tmp
+*.pbix.bak
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# Backups
+*.bak
+*.backup
