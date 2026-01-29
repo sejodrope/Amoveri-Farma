@@ -3,7 +3,10 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nCommit inicial: Escopo do projeto de automação Amoveri Farma\n\nEstrutura de planejamento para automação da área comercial:\n- Extração e tratamento de dados do NetSuite\n- Correlação com bases complementares \\(Excel, SharePoint\\)\n- Análise de KPIs e métricas comerciais\n- Desenvolvimento de dashboards e relatórios\n\nDocumentação incluída:\n- README.md: Visão geral e escopo do projeto\n- 00-INDICE: Estrutura e status do planejamento\n- 01-CHECKLIST-LEVANTAMENTO: Perguntas para reuniões\n- 02-TEMPLATE-REUNIAO: Template de documentação\n- 03-MAPA-PROCESSOS: Processos a serem automatizados\n- 04-REQUISITOS-TECNICOS: Arquitetura e infraestrutura\n- 05-KPIS-METRICAS: Indicadores e dashboards planejados\n- 06-TRATAMENTO-NETSUITE: Correções no relatório de vendas\n\nPróximos passos:\n- Reuniões com coordenadora comercial e TI\n- Validação de acessos e credenciais\n- Implementação do primeiro pipeline \\(MVP\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(dir:*)"
     ]
   }
 }
