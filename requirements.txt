@@ -1,0 +1,47 @@
+# Amoveri Farma - Automação de Cotações e Precificação
+# Última atualização: 2026-01-29
+
+# Web Scraping e Automação
+playwright==1.41.0
+selenium==4.17.0
+beautifulsoup4==4.12.3
+lxml==5.1.0
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.3
+openpyxl==3.1.2  # Para ler/escrever Excel
+xlrd==2.0.1  # Para ler Excel antigo (.xls)
+pyarrow==15.0.0  # Para Parquet
+
+# Database e Analytics
+duckdb==0.10.0
+sqlalchemy==2.0.25
+
+# NetSuite Integration
+requests==2.31.0
+zeep==4.2.1  # Para SOAP API do NetSuite
+oauthlib==3.2.2
+requests-oauthlib==1.3.1
+
+# Configuração e Ambiente
+python-dotenv==1.0.1
+pyyaml==6.0.1
+
+# Logging e Monitoramento
+loguru==0.7.2
+tqdm==4.66.1  # Progress bars
+
+# Machine Learning (Fase 3)
+scikit-learn==1.4.0
+joblib==1.3.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+
+# Development e Testing
+pytest==8.0.0
+pytest-cov==4.1.0
+black==24.1.1
+flake8==7.0.0

@@ -27,6 +27,8 @@
 - [[03-MAPA-PROCESSOS]] - Processos identificados e detalhados
 - [[04-REQUISITOS-TECNICOS]] - APIs, acessos, integrações necessárias
 - [[05-KPIS-METRICAS]] - Indicadores e métricas da área comercial
+- [[06-TRATAMENTO-NETSUITE]] - Tratamento de dados do NetSuite (relatórios)
+- [[07-ARQUITETURA-DETALHADA]] - Plano completo de arquitetura de dados
 
 ### 3. Sistemas
 - **NetSuite (Oracle)** - ERP principal, fonte de dados de vendas
