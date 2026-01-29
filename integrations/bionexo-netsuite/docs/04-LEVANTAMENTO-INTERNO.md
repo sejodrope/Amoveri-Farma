@@ -731,6 +731,221 @@ Data: ___/___/___
 
 ---
 
+---
+
+## SEÇÃO 11: REGRAS ESPECÍFICAS DO NEGÓCIO FARMACÊUTICO
+
+### 11.1 Informações que a Bionexo JÁ POSSUI
+**Responsável:** Validar com Bionexo na reunião
+
+A Bionexo já rastreia e possui as seguintes informações:
+- ✅ **Média de cotações por dia** - Confirmar se há dashboard/API disponível
+- ✅ **% de conversão** (quantos % de cotações viram pedido) - Solicitar acesso a relatórios
+
+**Perguntas para reunião:**
+- [ ] Podemos acessar esses dados via API ou dashboard?
+- [ ] Há outras métricas/analytics disponíveis?
+- [ ] Vocês fazem benchmark entre clientes?
+
+### 11.2 Regras Especiais de Laboratórios
+
+**Processo atual:**
+- Cada laboratório pode ter condições comerciais específicas
+- **Analistas comerciais** entram em contato com cada laboratório
+- Informações são mantidas em: [PREENCHER - planilha? sistema? email?]
+
+**Exemplos de regras especiais:**
+| Laboratório | Tipo de Regra | Descrição | Onde está documentado? |
+|-------------|---------------|-----------|------------------------|
+| [PREENCHER] | Desconto progressivo | Acima de 100 un = 5% desconto | [PREENCHER] |
+| [PREENCHER] | Margem mínima | Não pode ser menor que X% | [PREENCHER] |
+| [PREENCHER] | Prazo diferenciado | Entrega em até 48h | [PREENCHER] |
+
+**Para integração:**
+- [ ] Criar database de regras de laboratórios (ver [Dicionário de Dados](06-DICIONARIO-DADOS.md) - Tabela 7.3)
+- [ ] Definir interface para analistas cadastrarem/atualizarem regras
+- [ ] Motor de precificação deve consultar essa base antes de calcular
+
+**Responsáveis:**
+- Manutenção das regras: Analistas comerciais
+- Validação técnica: Pedro
+- Aprovação de mudanças: [PREENCHER - Gerente comercial?]
+
+### 11.3 Operadoras Logísticas (OL) - Descontos
+
+**Característica crítica:**
+- OL de descontos **mudam frequentemente** (sem periodicidade definida)
+- **Não há padrão** de quando ocorrem mudanças
+- Podem mudar a qualquer momento
+
+**Processo atual de atualização:**
+```
+[PREENCHER - Como funciona hoje?]
+
+Exemplo:
+1. OL envia nova tabela de descontos por email
+2. Analista valida informações
+3. Analista atualiza planilha/sistema
+4. Informa equipe de compras
+```
+
+**Para integração:**
+- [ ] Criar database de descontos OL (ver [Dicionário de Dados](06-DICIONARIO-DADOS.md) - Tabela 7.2)
+- [ ] Sistema deve permitir upload de nova tabela **sem necessidade de deploy**
+- [ ] Versionamento: manter histórico de tabelas (para auditoria)
+- [ ] Notificação: alertar equipe quando nova tabela for aplicada
+
+**Estrutura da tabela OL atual:**
+| Informação | Formato | Exemplo |
+|------------|---------|---------|
+| Nome OL | [PREENCHER] | [PREENCHER] |
+| Laboratório | [PREENCHER] | [PREENCHER] |
+| Produto (EAN ou NCM?) | [PREENCHER] | [PREENCHER] |
+| % Desconto | [PREENCHER] | [PREENCHER] |
+| Vigência | [PREENCHER] | [PREENCHER] |
+
+**Responsável atualização:** [PREENCHER - Nome da analista/cargo]
+
+### 11.4 CMED - Preço Máximo ao Consumidor (PMC)
+
+**Atualização anual obrigatória:**
+- **Data fixa:** Todo **1º de abril**
+- Publicado pela **Anvisa** (Agência Nacional de Vigilância Sanitária)
+- Lista completa com PMC de todos os medicamentos registrados
+
+**Importância crítica:**
+```
+⚠️ ATENÇÃO: Nossos valores NÃO PODEM ultrapassar o PMC
+⚠️ Se ultrapassar: Risco de denúncia à CMED e multas pesadas
+⚠️ Sistema DEVE validar automaticamente e BLOQUEAR cotação se > PMC
+```
+
+**Processo atual:**
+```
+[PREENCHER - Como funciona hoje?]
+
+Exemplo:
+1. Em 1º de abril, Anvisa publica lista CMED
+2. [Nome] baixa arquivo Excel/CSV
+3. [Nome] importa para [sistema/planilha]
+4. Analistas consultam manualmente antes de cotar
+```
+
+**Para integração:**
+- [ ] Importação automática da lista CMED (todo 1º abril)
+- [ ] Database CMED (ver [Dicionário de Dados](06-DICIONARIO-DADOS.md) - Tabela 7.1)
+- [ ] Validação automática: `SE Preço_Calculado > PMC ENTÃO Alerta_Crítico`
+- [ ] Ajuste automático de margem (se viável) ou bloqueio manual
+
+**Variações de PMC:**
+- PMC 0% (sem imposto)
+- PMC 12% (ICMS 12%)
+- PMC 17% (ICMS 17%)
+- PMC 18% (ICMS 18%)
+- PMC 19% (ICMS 19%)
+- PMC 20% (ICMS 20%)
+
+**Sistema deve usar:** PMC correspondente ao ICMS da UF de destino
+
+**Fonte oficial:**
+- URL: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed
+- Formato: [PREENCHER - Excel? CSV? API?]
+- Quem faz download hoje: [PREENCHER - Nome]
+
+### 11.5 Tabela de Precificação - Tributação
+
+**Responsável:** **Thiago** (Tributação)
+
+**O que é:**
+- Matriz tributária com regras de ICMS-ST, PIS, COFINS
+- Varia por: **NCM** (classificação fiscal) + **UF de destino**
+
+**Frequência de atualização:**
+- Quando há mudança na legislação fiscal
+- Estimado: [PREENCHER - Trimestral? Semestral? Sob demanda?]
+
+**Estrutura:**
+| NCM | UF Destino | MVA Ajustada | Aliq Interna | PIS | COFINS | Observação |
+|-----|------------|--------------|--------------|-----|--------|------------|
+| [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+
+**Para integração:**
+- [ ] Thiago fornece matriz tributária completa (Excel ou CSV)
+- [ ] Importar para database (ver [Dicionário de Dados](06-DICIONARIO-DADOS.md) - Tabela 7.4)
+- [ ] Motor de precificação consulta automaticamente
+- [ ] Interface para Thiago atualizar quando legislação mudar
+
+**Contato Thiago:**
+- Nome completo: [PREENCHER]
+- Email: [PREENCHER]
+- Ramal: [PREENCHER]
+- Disponibilidade para reunião técnica: [PREENCHER]
+
+### 11.6 Fluxo de Cálculo de Preço (Resumo)
+
+**Ordem de aplicação:**
+```
+1. Busca CUSTO no NetSuite (custo médio do produto)
+2. Busca MATRIZ TRIBUTÁRIA (Thiago)
+   - NCM do produto + UF destino
+   - Calcula ICMS-ST
+   - Calcula PIS/COFINS
+3. Busca REGRAS DE LABORATÓRIO (Analistas)
+   - Se houver regra especial, aplica
+4. Aplica MARGEM DE LUCRO (configurável)
+5. Busca DESCONTOS OL (tabela atualizada)
+   - Aplica desconto da OL
+6. VALIDAÇÃO PMC (CMED)
+   - ⚠️ SE Preço > PMC ENTÃO:
+     - Tenta reduzir margem automaticamente
+     - SE margem mínima ainda viável: Ajusta para PMC
+     - SENÃO: BLOQUEIA e notifica gerente
+7. Retorna PREÇO FINAL
+```
+
+**Diagrama detalhado:** Ver [Diagramas e Fluxos](05-DIAGRAMAS-FLUXOS.md) - Seção 4
+
+### 11.7 Compliance e Regulamentação Específica
+
+**Anvisa:**
+- Produtos controlados: [PREENCHER - Há? Quais categorias?]
+- Receituário especial: [PREENCHER - Impacta integração?]
+- Rastreabilidade (SNGPC): [PREENCHER - Sim/Não?]
+
+**CMED:**
+- Monitoramento de preços: Sim (via PMC)
+- Relatórios obrigatórios: [PREENCHER]
+
+**Vigilância Sanitária:**
+- Autorização de Funcionamento: [PREENCHER - Número]
+- Responsável Técnico: [PREENCHER - Nome e CRF]
+
+### 11.8 Perguntas Específicas para Discussão Interna
+
+**Antes da reunião com Bionexo, alinhar:**
+
+- [ ] **Regras de laboratórios:**
+  - Quantos laboratórios têm regras especiais? _______
+  - Exemplo de 3 regras mais comuns: _______
+  - Frequência de mudança: _______
+
+- [ ] **OL Descontos:**
+  - Quantas OLs ativas? _______
+  - Última vez que mudou: _______
+  - Formato atual da tabela: _______
+
+- [ ] **CMED:**
+  - Quem é responsável por importar lista? _______
+  - Já houve algum caso de preço acima PMC? _______
+  - Como evitamos hoje? _______
+
+- [ ] **Tributação:**
+  - Thiago pode fornecer matriz completa? [ ] Sim [ ] Não
+  - Quantos NCMs diferentes temos? _______
+  - Vendemos para quais UFs? _______
+
+---
+
 **Última atualização:** 2026-01-29
-**Versão:** 1.0
+**Versão:** 1.1 (Adicionada Seção 11)
 **Status:** [ ] Rascunho [ ] Em revisão [ ] Aprovado

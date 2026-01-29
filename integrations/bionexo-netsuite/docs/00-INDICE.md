@@ -43,10 +43,12 @@
 
 ### FASE 3: Implementação (Após Reunião)
 
+**Documentos já criados:**
+- ✅ [05-DIAGRAMAS-FLUXOS.md](05-DIAGRAMAS-FLUXOS.md) - Fluxogramas Mermaid (AS-IS, TO-BE, Arquitetura, Precificação)
+- ✅ [06-DICIONARIO-DADOS.md](06-DICIONARIO-DADOS.md) - Mapeamento de IDs e campos entre sistemas
+
 **Documentos a serem criados:**
-- `05-ESPECIFICACAO-TECNICA.md` - Spec detalhada baseada na reunião
-- `06-ARQUITETURA.md` - Diagramas e decisões de arquitetura
-- `07-MAPEAMENTO-DADOS.md` - DE→PARA de campos NetSuite ↔ Bionexo
+- `07-ESPECIFICACAO-TECNICA.md` - Spec detalhada baseada na reunião
 - `08-MANUAL-DESENVOLVIMENTO.md` - Guia de setup e desenvolvimento
 
 ---
@@ -117,11 +119,11 @@
 - [02-CHECKLIST-TECNICO-API.md](02-CHECKLIST-TECNICO-API.md) - Perguntas técnicas
 - [03-TEMPLATE-ATA-REUNIAO.md](03-TEMPLATE-ATA-REUNIAO.md) - Documentação
 
-### Referência (a criar após reunião)
-- Especificação Técnica
-- Arquitetura
-- Mapeamento de Dados
-- Manual de Desenvolvimento
+### Referência
+- ✅ [05-DIAGRAMAS-FLUXOS.md](05-DIAGRAMAS-FLUXOS.md) - Diagramas e Fluxogramas Mermaid
+- ✅ [06-DICIONARIO-DADOS.md](06-DICIONARIO-DADOS.md) - Dicionário de Dados e Mapeamento
+- ⏳ Especificação Técnica (após reunião)
+- ⏳ Manual de Desenvolvimento (após reunião)
 
 ---
 
@@ -168,8 +170,9 @@ R: Sim! São apenas templates. Adapte conforme necessário.
 | 02-CHECKLIST-TECNICO-API.md | ✅ Completo | 2026-01-29 |
 | 03-TEMPLATE-ATA-REUNIAO.md | ✅ Completo | 2026-01-29 |
 | 04-LEVANTAMENTO-INTERNO.md | 🔄 A Preencher | 2026-01-29 |
-| 05-ESPECIFICACAO-TECNICA.md | ⏳ Aguardando Reunião | - |
-| 06-ARQUITETURA.md | ⏳ Aguardando Reunião | - |
+| 05-DIAGRAMAS-FLUXOS.md | ✅ Completo | 2026-01-29 |
+| 06-DICIONARIO-DADOS.md | 🔄 A Completar (reunião) | 2026-01-29 |
+| 07-ESPECIFICACAO-TECNICA.md | ⏳ Aguardando Reunião | - |
 
 ---
 
