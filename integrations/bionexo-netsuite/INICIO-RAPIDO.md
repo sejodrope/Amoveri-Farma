@@ -1,146 +1,119 @@
-# Início Rápido - Integração Bionexo x NetSuite
+# Inicio Rapido - Integracao Bionexo x NetSuite
 
-**Guia de 5 minutos para começar**
-
----
-
-## 🎯 Você está aqui
-
-Reunião de kickoff: **Segunda-feira, 14h**
+**Guia rapido para comecar**
 
 ---
 
-## ⚡ O Que Fazer AGORA (em ordem)
+## Voce esta aqui
 
-### 1. Ler o Índice (5 min)
-📂 [docs/00-INDICE.md](docs/00-INDICE.md)
+Reuniao de kickoff com Bionexo: **Segunda-feira, 14h**
 
-Entenda a estrutura da documentação e qual documento é para você.
+---
 
-### 2. Preencher Levantamento Interno (2-3h, até Domingo)
-📋 [docs/04-LEVANTAMENTO-INTERNO.md](docs/04-LEVANTAMENTO-INTERNO.md)
+## O Que Fazer AGORA (em ordem)
 
-**Seções por pessoa:**
-- **Bruna**: Seções 1, 2, 6, 8 (Processo, Volumes, Regras de Negócio, Treinamento)
-- **Kamila**: Seção 3 (NetSuite completa)
-- **Pedro**: Todas as outras + consolidação final
+### 1. Ler o Indice
+[docs/00-INDICE.md](docs/00-INDICE.md)
 
-### 3. Estudar Preparação da Reunião (30 min)
-📖 [docs/01-PREPARACAO-REUNIAO.md](docs/01-PREPARACAO-REUNIAO.md)
+Entenda a estrutura da documentacao e qual documento e para voce.
+
+### 2. Preencher Levantamento Interno (ate Domingo)
+[docs/04-LEVANTAMENTO-INTERNO.md](docs/04-LEVANTAMENTO-INTERNO.md)
+
+**Secoes por pessoa:**
+- **Bruna**: Secoes 1, 2, 6, 8 (Processo, Volumes, Regras de Negocio, Treinamento)
+- **Kamila**: Secao 3 (NetSuite completa)
+- **Pedro**: Todas as outras + consolidacao final
+
+### 3. Estudar Preparacao da Reuniao
+[docs/01-PREPARACAO-REUNIAO.md](docs/01-PREPARACAO-REUNIAO.md)
 
 Entenda:
-- Agenda da reunião
-- Seu papel específico
+- Agenda da reuniao
+- Seu papel especifico
 - O que perguntar
 
-### 4. Imprimir/Ter em Mãos (Domingo noite)
-✅ [docs/02-CHECKLIST-TECNICO-API.md](docs/02-CHECKLIST-TECNICO-API.md)
+### 4. Ter em Maos na Reuniao
+[docs/02-CHECKLIST-TECNICO-API.md](docs/02-CHECKLIST-TECNICO-API.md)
 
-Use durante a reunião para garantir que nada seja esquecido.
+Use durante a reuniao para garantir que nada seja esquecido.
 
 ---
 
-## 📅 Timeline
+## Timeline
 
-### Até Domingo (Antes da Reunião)
+### Ate Domingo (Antes da Reuniao)
 - [ ] Levantamento interno preenchido
-- [ ] Validações com Bruna e Kamila feitas
-- [ ] Diagrama de processo criado (PowerPoint/Draw.io)
-- [ ] Screenshots do NetSuite tirados
+- [ ] Validacoes com Bruna e Kamila feitas
 - [ ] Credenciais Bionexo testadas (login manual)
-- [ ] Checklist impresso ou em tablet
 
-### Segunda-feira, 14h (Reunião)
-- [ ] Abrir [RESUMO-EXECUTIVO.md](docs/RESUMO-EXECUTIVO.md) para apresentação
+### Segunda-feira, 14h (Reuniao)
+- [ ] Abrir [RESUMO-EXECUTIVO.md](docs/RESUMO-EXECUTIVO.md) para apresentacao
 - [ ] Usar [02-CHECKLIST-TECNICO-API.md](docs/02-CHECKLIST-TECNICO-API.md) para perguntas
 - [ ] Preencher [03-TEMPLATE-ATA-REUNIAO.md](docs/03-TEMPLATE-ATA-REUNIAO.md)
 
-### Até Terça (Pós-Reunião)
+### Ate Terca (Pos-Reuniao)
 - [ ] Ata enviada para todos
-- [ ] Acesso à sandbox obtido
-- [ ] Documentação da API baixada
-- [ ] Ambiente de desenvolvimento configurado
-- [ ] Primeira chamada de API (autenticação)
+- [ ] Acesso a sandbox obtido
+- [ ] Documentacao da API baixada
 
 ---
 
-## 🗂️ Estrutura de Documentos
+## Estrutura de Documentos
 
 ```
-📁 integrations/bionexo-netsuite/
-│
-├── INICIO-RAPIDO.md ← VOCÊ ESTÁ AQUI
-├── README.md        ← Visão geral do projeto
-│
-├── 📁 docs/
-│   ├── 00-INDICE.md                    ← Navegação
-│   ├── 01-PREPARACAO-REUNIAO.md        ← Guia completo
-│   ├── 02-CHECKLIST-TECNICO-API.md     ← Perguntas técnicas
-│   ├── 03-TEMPLATE-ATA-REUNIAO.md      ← Documentar reunião
-│   ├── 04-LEVANTAMENTO-INTERNO.md      ← ⚠️ PREENCHER URGENTE
-│   └── RESUMO-EXECUTIVO.md             ← Apresentação 5min
-│
-├── 📁 specs/  (vazio - preencher após reunião)
-├── 📁 tests/  (vazio)
-├── 📁 config/ (vazio)
-└── 📁 logs/   (vazio)
+integrations/bionexo-netsuite/
+|
+|-- INICIO-RAPIDO.md          <- VOCE ESTA AQUI
+|-- README.md                 <- Visao geral do projeto
+|
+|-- docs/
+|   |-- 00-INDICE.md                    <- Navegacao
+|   |-- 01-PREPARACAO-REUNIAO.md        <- Guia completo
+|   |-- 02-CHECKLIST-TECNICO-API.md     <- Perguntas tecnicas
+|   |-- 03-TEMPLATE-ATA-REUNIAO.md      <- Documentar reuniao
+|   |-- 04-LEVANTAMENTO-INTERNO.md      <- PREENCHER URGENTE
+|   |-- 05-DIAGRAMAS-FLUXOS.md          <- Diagramas Mermaid
+|   |-- 06-DICIONARIO-DADOS.md          <- Mapeamento de dados
+|   |-- RESUMO-EXECUTIVO.md             <- Apresentacao reuniao
+|   +-- GUIA-VISUAL-DIAGRAMAS.md        <- Como usar diagramas
 ```
 
 ---
 
-## 🎯 Objetivos da Reunião
+## ESCOPO CORRETO da Integracao
 
-Sair com:
-1. ✅ Documentação da API
-2. ✅ Acesso a sandbox
-3. ✅ Arquitetura definida
-4. ✅ Cronograma acordado
-5. ✅ Responsáveis claros
-6. ✅ Próxima reunião agendada
+**Bionexo precisa ENXERGAR os PRECOS do NetSuite.**
 
----
+- Direcao: NetSuite -> Bionexo (precos)
+- Pre-requisito: Criar tabela de precos (nao existe hoje)
+- Dimensoes: Produto x UF (27 estados) x Laboratorio (4-5)
 
-## 🚨 Top 3 Perguntas Mais Importantes
-
-Se o tempo for curto, garanta essas 3:
-
-1. **Onde está a documentação da API e como acessar sandbox?**
-2. **Qual o modelo de autenticação e quais os rate limits?**
-3. **Já tem cliente com NetSuite integrado? Podemos ver exemplo?**
+Ver detalhes em [PLANO-PROJETO.md](../../PLANO-PROJETO.md)
 
 ---
 
-## 📞 Contatos Rápidos
+## Perguntas Top 3 para a Reuniao
 
-**Dúvidas antes da reunião:**
+1. **Onde esta a documentacao da API de precos e como acessar sandbox?**
+2. **Qual o formato esperado para envio de tabela de precos?**
+3. **Ja tem algum cliente com NetSuite integrado?**
+
+---
+
+## Contatos
+
+**Amoveri Pontual:**
 - Bruna (Comercial): bruna@amoverifarma.com.br
 - Kamila (NetSuite): kamila@amoverifarma.com.br
 - Pedro (Tech Lead): pedro@amoverifarma.com.br
 
 **Bionexo:**
-- Gisele (Gestora): [preencher na reunião]
+- Gisele (Gestora): [preencher na reuniao]
 
 ---
 
-## 💡 Dicas Importantes
-
-1. **Não se preocupe em preencher 100%** do levantamento. Preencha o que conseguir.
-2. **Marque como "A LEVANTAR"** informações que não tem agora.
-3. **Peça ajuda** a Bruna e Kamila para suas seções.
-4. **Durante a reunião**, seja assertivo: "Precisamos da documentação hoje".
-5. **Não aceite** respostas vagas como "enviamos depois".
-
----
-
-## 🎬 Começar
-
-**Próximo passo:**
+**Proximo passo:**
 1. Abra [docs/00-INDICE.md](docs/00-INDICE.md)
 2. Depois, abra [docs/04-LEVANTAMENTO-INTERNO.md](docs/04-LEVANTAMENTO-INTERNO.md)
 3. Comece a preencher!
-
----
-
-**Boa preparação e boa reunião!** 🚀
-
-*Se tiver dúvidas, todo documento tem seção de "Como Usar"*

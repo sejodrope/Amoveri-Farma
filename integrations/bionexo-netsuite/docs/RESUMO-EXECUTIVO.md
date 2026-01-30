@@ -1,174 +1,143 @@
 # Resumo Executivo - Integração Bionexo x NetSuite
 
-**Apresentação de 5 minutos para abertura da reunião**
+**Apresentação para abertura da reuniao de kickoff**
 
 ---
 
 ## O Problema
 
-**Situação Atual:**
-- Processo manual de cotações consome **2 horas por cotação**
-- Entrada de dados duplicada (NetSuite → Excel → Bionexo → Excel → NetSuite)
-- Erros de digitação causam retrabalho
-- Dificuldade em escalar operação
+**Situacao Atual:**
+- Nao temos tabela de precos integrada com a Bionexo
+- Precificacao e feita manualmente (Excel/planilhas) a cada cotacao
+- Analista precisa consultar custo, ICMS, OL, PMC separadamente
+- Precos variam por estado (UF), laboratorio e tipo de operacao
 
 **Impacto:**
-- _____ horas/semana gastas em trabalho manual
-- Risco de perda de vendas por lentidão
-- Equipe sobrecarregada com tarefas operacionais
+- Tempo excessivo por cotacao (consultas manuais)
+- Risco de erro no calculo de impostos (ICMS-ST)
+- Risco de ultrapassar PMC (multa Anvisa)
+- Impossibilidade de escalar volume de cotacoes
 
 ---
 
-## A Solução
+## A Solucao
 
-**Integração Automatizada NetSuite ↔ Bionexo**
+**Bionexo enxergando precos do NetSuite automaticamente**
 
 ```
 ANTES (Manual):
-NetSuite → Excel → Upload → Bionexo → Download → Excel → NetSuite
-[2 horas + erros]
+Cotacao chega -> Analista consulta custo -> Calcula ICMS -> Verifica PMC -> Digita preco na Bionexo
+[Processo manual, propenso a erros]
 
 DEPOIS (Automatizado):
-NetSuite →→→ API →→→ Bionexo →→→ API →→→ NetSuite
-[15 minutos + zero erros]
+Tabela de precos (Produto x UF x Lab) -> API -> Bionexo consulta automaticamente
+[Precos pre-calculados, validados contra PMC]
 ```
 
-**Benefícios:**
-- ⚡ **85% mais rápido** (2h → 15 min)
-- ✅ **Zero erros** de digitação
-- 📈 **Escalável** (3x mais cotações sem contratar)
-- 💰 **ROI em 6 meses**
+**Direcao principal:** NetSuite -> Bionexo (precos)
+**Direcao secundaria:** Bionexo -> NetSuite (pedidos aceitos)
 
 ---
 
-## Escopo da Integração
+## Pre-requisito Critico
 
-### Fase 1: Proof of Concept (2 semanas)
-✓ Autenticação funcionando
-✓ 1 cotação criada via API
-✓ Decisão go/no-go
+**NAO TEMOS tabela de precos no NetSuite hoje.**
 
-### Fase 2: Piloto (4 semanas)
-✓ 10-20 cotações reais
-✓ 3 compradores piloto
-✓ Monitoramento e logs
+Antes de integrar com Bionexo, precisamos:
+1. Criar estrutura de tabela de precos no NetSuite
+2. Montar matriz tributaria (NCM x UF) com Thiago
+3. Popular tabela com precos calculados e validados contra PMC
 
-### Fase 3: Produção (2 semanas)
-✓ Rollout gradual (20% → 50% → 100%)
-✓ Treinamento de equipe
-✓ Go-live completo
-
-**Total: 8-10 semanas**
+**Dimensoes da tabela:** Produto x UF (27 estados) x Laboratorio (4-5 principais)
 
 ---
 
-## O Que Precisamos Descobrir Hoje
+## Escopo da Integracao
 
-### 1. Técnico (Especialistas Bionexo)
-- Como funciona a API?
-- Documentação e sandbox disponíveis?
-- Autenticação e rate limits?
-- Webhooks ou polling?
+### Fase 1: Tabela de Precos
+- Criar estrutura no NetSuite (Kamila)
+- Montar matriz tributaria (Thiago)
+- Popular e validar contra PMC
 
-### 2. Processo (Gisele + Time Comercial)
-- Fluxo ideal de integração
-- Casos de sucesso similares
-- Suporte e SLA
+### Fase 2: Middleware + Integracao
+- Motor de precificacao local (Python)
+- Conectar com API Bionexo
+- Piloto com 10-20 produtos, 1-2 UFs, 1 laboratorio
 
-### 3. Cronograma (Todos)
-- Quando podemos começar?
-- Quem são os responsáveis?
-- Próxima reunião?
+### Fase 3: Producao
+- Expandir para todos os produtos, UFs e laboratorios
+
+---
+
+## O Que Precisamos Descobrir na Reuniao
+
+### 1. Tecnico (Especialistas Bionexo)
+- Como funciona a API de precos?
+- Documentacao e sandbox disponiveis?
+- Autenticacao e rate limits?
+- Como enviar tabela de precos? (endpoint, formato, batch?)
+
+### 2. Processo (Gisele)
+- Qual formato a Bionexo espera para tabela de precos?
+- Frequencia de atualizacao suportada?
+- Casos de sucesso com NetSuite?
+
+### 3. Mapeamento (Todos)
+- Como mapear produtos? (EAN como chave?)
+- Como mapear fornecedores? (CNPJ?)
+- Como tratar precos por UF na API?
 
 ---
 
 ## Nosso Time
 
 **Amoveri Pontual:**
-- **Pedro** (Inteligência Comercial) - Tech Lead
+- **Pedro** (Inteligencia Comercial) - Tech Lead
 - **Kamila** (TI NetSuite) - Especialista NetSuite
 - **Bruna** (Comercial) - Dona do Processo
 
 **Bionexo:**
 - **Gisele** - Gestora de Contas
-- **Especialistas** - Time Técnico
+- **Especialistas** - Time Tecnico
 
 ---
 
-## Próximos Passos (Após Reunião)
+## Proximos Passos (Apos Reuniao)
 
 **Imediato (24h):**
-- Ata documentada e distribuída
-- Acesso a sandbox e documentação
-- Primeiras chamadas de API
+- Ata documentada e distribuida
+- Acesso a sandbox e documentacao da API
 
 **Semana 1:**
-- PoC de autenticação
-- Ambiente de desenvolvimento
-- Reunião de checkpoint
+- Coletar inputs de Thiago (matriz tributaria)
+- Definir estrutura da tabela de precos com Kamila
+- Primeiras chamadas de API (autenticacao)
 
 **Semana 2:**
-- Primeira cotação teste
-- Validação de fluxo
+- Tabela de precos piloto criada
+- Primeiro envio de precos teste para sandbox Bionexo
 
 ---
 
-## Perguntas para a Bionexo
+## Perguntas Top 3
 
-**Top 3 Mais Importantes:**
-
-1. **Onde está a documentação da API e como acessar o sandbox?**
-   → Precisamos começar a desenvolver essa semana
-
-2. **Qual o modelo de autenticação e rate limits?**
-   → Define arquitetura da solução
-
-3. **Já tem algum cliente com NetSuite integrado?**
-   → Aprender com casos de sucesso
-
----
-
-## Métricas de Sucesso
-
-| Métrica | Antes | Meta |
-|---------|-------|------|
-| Tempo/cotação | 2h | 15 min |
-| Taxa de erro | ~5% | <0.1% |
-| Cotações/semana | _____ | 3x mais |
-| Horas economizadas | 0 | 20h/sem |
-
-**ROI Esperado:**
-- Investimento: R$ _____ (a definir)
-- Economia: R$ _____/mês
-- Payback: 6 meses
-
----
-
-## Agenda de Hoje (90 min)
-
-1. **Alinhamento** (10 min) - Esta apresentação
-2. **Processo** (25 min) - Mapear fluxo as-is e to-be
-3. **Técnico** (35 min) - API, arquitetura, mapeamento
-4. **Segurança** (10 min) - LGPD, compliance
-5. **Próximos Passos** (10 min) - Cronograma e ações
+1. **Onde esta a documentacao da API de precos e como acessar sandbox?**
+2. **Qual o formato esperado para envio de tabela de precos? (campos, estrutura)**
+3. **Ja tem algum cliente com NetSuite integrado? Podemos ver exemplo?**
 
 ---
 
 ## Expectativas
 
-**O que queremos sair desta reunião:**
-- ✅ Documentação da API em mãos
-- ✅ Acesso a sandbox configurado
-- ✅ Decisões de arquitetura tomadas
-- ✅ Cronograma acordado
-- ✅ Responsáveis definidos
-- ✅ Próxima reunião agendada
+**Sair desta reuniao com:**
+- Documentacao da API em maos
+- Acesso a sandbox configurado
+- Entendimento do formato de envio de precos
+- Cronograma inicial acordado
+- Responsaveis definidos
+- Proxima reuniao agendada
 
 ---
 
-**Vamos começar?** 🚀
-
----
-
-*Documentação completa disponível em:*
+*Documentacao completa disponivel em:*
 *[integrations/bionexo-netsuite/docs](../)*

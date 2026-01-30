@@ -559,7 +559,195 @@ Log de todas as integrações.
 
 ---
 
-## 8. PERGUNTAS CRÍTICAS PARA BIONEXO
+### 7.6 Tabela: `tbl_tabela_precos` (NOVA - PRINCIPAL)
+
+**Tabela central de preços calculados.** Resultado do motor de precificação.
+Cada linha representa um preço para a combinação: **Produto × UF × Laboratório**.
+
+| Coluna | Tipo | PK | Descrição |
+|--------|------|----|-----------|
+| `id` | INT | ✅ | ID autoincrement |
+| `ean` | VARCHAR(13) | | Código EAN do produto |
+| `netsuite_item_id` | INT | | Internal ID do item no NetSuite |
+| `sku` | VARCHAR(50) | | SKU interno Amoveri |
+| `produto_nome` | VARCHAR(500) | | Nome do produto |
+| `ncm` | VARCHAR(10) | | Classificação fiscal |
+| `uf_destino` | CHAR(2) | | UF de destino (SP, RJ, MG, etc) |
+| `laboratorio_id` | INT | | FK → tbl_regras_laboratorios |
+| `laboratorio_nome` | VARCHAR(200) | | Nome do laboratório/fornecedor |
+| `laboratorio_cnpj` | VARCHAR(14) | | CNPJ do laboratório |
+| `custo_base` | DECIMAL(10,2) | | Custo de aquisição (NetSuite) |
+| `icms_st` | DECIMAL(10,2) | | Valor ICMS-ST calculado |
+| `pis` | DECIMAL(10,2) | | Valor PIS (0 se monofásico) |
+| `cofins` | DECIMAL(10,2) | | Valor COFINS (0 se monofásico) |
+| `custo_tributado` | DECIMAL(10,2) | | Custo + tributos |
+| `margem_percentual` | DECIMAL(5,2) | | Margem aplicada (%) |
+| `preco_com_margem` | DECIMAL(10,2) | | Custo tributado × (1 + margem) |
+| `desconto_ol_percentual` | DECIMAL(5,2) | | Desconto OL do laboratório (%) |
+| `preco_final` | DECIMAL(10,2) | | **PREÇO QUE VAI PARA BIONEXO** |
+| `pmc_uf` | DECIMAL(10,2) | | PMC CMED para esta UF |
+| `preco_valido` | BOOLEAN | | TRUE se preco_final <= pmc_uf |
+| `margem_reduzida` | BOOLEAN | | TRUE se margem foi reduzida para caber no PMC |
+| `unidade_medida` | VARCHAR(10) | | UN, CX, FR, etc |
+| `data_calculo` | TIMESTAMP | | Data/hora do último cálculo |
+| `data_vigencia` | DATE | | Data de vigência do preço |
+| `ativo` | BOOLEAN | | Se preço está ativo |
+| `motivo_bloqueio` | VARCHAR(500) | | Se inativo, motivo (ex: "Acima PMC") |
+
+**Índices:**
+- UNIQUE: `ean` + `uf_destino` + `laboratorio_cnpj` + `data_vigencia`
+- INDEX: `uf_destino`
+- INDEX: `laboratorio_cnpj`
+- INDEX: `preco_valido`
+- INDEX: `ativo`
+
+**Volume estimado:**
+```
+N_produtos × N_ufs × N_laboratorios = Total de registros
+
+Exemplo: 500 produtos × 27 UFs × 5 labs = 67.500 registros
+Exemplo: 1000 produtos × 10 UFs × 5 labs = 50.000 registros
+```
+
+**Atualização:**
+- Recalculado quando: custo muda, OL muda, CMED atualiza, legislação muda
+- Scheduler: verificação diária de custos alterados no NetSuite
+
+---
+
+### 7.7 Tabela: `tbl_laboratorios`
+
+Cadastro dos 4-5 laboratórios/fornecedores principais.
+
+| Coluna | Tipo | PK | Descrição |
+|--------|------|----|-----------|
+| `id` | INT | ✅ | ID autoincrement |
+| `nome` | VARCHAR(200) | | Nome do laboratório |
+| `cnpj` | VARCHAR(14) | UK | CNPJ (único) |
+| `netsuite_vendor_id` | INT | | Internal ID no NetSuite |
+| `contato_nome` | VARCHAR(200) | | Nome do contato comercial |
+| `contato_email` | VARCHAR(200) | | Email do contato |
+| `contato_telefone` | VARCHAR(20) | | Telefone |
+| `analista_responsavel` | VARCHAR(100) | | Analista comercial da Amoveri |
+| `ativo` | BOOLEAN | | Se está ativo |
+| `data_cadastro` | TIMESTAMP | | Data de cadastro |
+| `observacoes` | TEXT | | Observações gerais |
+
+**Dados a popular (preencher com Bruna):**
+
+| # | Nome | CNPJ | Analista Responsável |
+|---|------|------|---------------------|
+| 1 | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+| 2 | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+| 3 | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+| 4 | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+| 5 | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+
+---
+
+### 7.8 Tabela: `tbl_uf_icms`
+
+Alíquotas de ICMS por estado para cálculo do PMC aplicável.
+
+| Coluna | Tipo | PK | Descrição |
+|--------|------|----|-----------|
+| `uf` | CHAR(2) | ✅ | Sigla da UF |
+| `nome_estado` | VARCHAR(50) | | Nome do estado |
+| `icms_aliquota` | DECIMAL(4,2) | | Alíquota ICMS interna (%) |
+| `pmc_coluna` | VARCHAR(10) | | Coluna PMC CMED correspondente (pmc_17, pmc_18, etc) |
+| `ativo` | BOOLEAN | | Se vendemos para este estado |
+
+**Dados pré-populados:**
+
+| UF | Estado | ICMS | Coluna PMC |
+|----|--------|------|------------|
+| SP | São Paulo | 18% | pmc_18 |
+| RJ | Rio de Janeiro | 20% | pmc_20 |
+| MG | Minas Gerais | 18% | pmc_18 |
+| BA | Bahia | 19% | pmc_19 |
+| PR | Paraná | 19% | pmc_19 |
+| RS | Rio Grande do Sul | 17% | pmc_17 |
+| SC | Santa Catarina | 17% | pmc_17 |
+| GO | Goiás | 17% | pmc_17 |
+| PE | Pernambuco | 18% | pmc_18 |
+| CE | Ceará | 18% | pmc_18 |
+| ES | Espírito Santo | 17% | pmc_17 |
+| DF | Distrito Federal | 18% | pmc_18 |
+| ... | ... | ... | ... |
+
+**Ação:** Confirmar com Thiago quais UFs atendemos e alíquotas corretas.
+
+---
+
+## 8. MAPEAMENTO DE PREÇOS - NETSUITE ↔ BIONEXO
+
+### 8.1 Como a Bionexo Recebe Nossos Preços
+
+**Fluxo:**
+```
+tbl_tabela_precos (Middleware)
+    → API expõe endpoint GET /prices
+        → Bionexo consulta preços por EAN + UF
+            → Hospital vê preço na cotação
+```
+
+**Endpoint sugerido:**
+```
+GET /api/v1/prices?ean=7891234567890&uf=SP
+
+Response:
+{
+    "ean": "7891234567890",
+    "produto": "Paracetamol 500mg",
+    "uf": "SP",
+    "laboratorio": "EMS",
+    "preco_unitario": 15.39,
+    "unidade_medida": "UN",
+    "pmc": 18.50,
+    "valido": true,
+    "vigencia": "2026-01-30",
+    "observacoes": null
+}
+```
+
+**OU endpoint batch (múltiplos produtos):**
+```
+POST /api/v1/prices/batch
+
+Request:
+{
+    "uf": "SP",
+    "produtos": ["7891234567890", "7891234567891", "7891234567892"]
+}
+
+Response:
+{
+    "uf": "SP",
+    "precos": [
+        { "ean": "7891234567890", "preco": 15.39, "pmc": 18.50, "valido": true },
+        { "ean": "7891234567891", "preco": 22.10, "pmc": 25.00, "valido": true },
+        { "ean": "7891234567892", "preco": null, "valido": false, "motivo": "Produto sem custo" }
+    ]
+}
+```
+
+### 8.2 Perguntas sobre Preços para Bionexo
+
+**Na reunião de segunda, perguntar:**
+
+- [ ] A Bionexo puxa os preços de nós (pull) ou nós enviamos (push)?
+- [ ] Se push: qual endpoint usamos para enviar preços?
+- [ ] Se pull: vocês acessam nossa API diretamente?
+- [ ] É possível enviar tabela de preços completa (batch/bulk)?
+- [ ] Qual frequência de atualização de preços suportada?
+- [ ] Formato esperado: JSON, CSV, XML?
+- [ ] Preço por UF: vocês suportam preço diferente por estado?
+- [ ] Como vocês identificam a UF do hospital que está cotando?
+- [ ] É possível ter preço "condicional" (ex: acima de X unidades)?
+
+---
+
+## 9. PERGUNTAS CRÍTICAS PARA BIONEXO
 
 **IMPORTANTE: Essas perguntas devem ser feitas na reunião de segunda-feira!**
 
@@ -589,53 +777,99 @@ Log de todas as integrações.
 
 ---
 
-## 9. AÇÕES NECESSÁRIAS PÓS-REUNIÃO
+## 10. AÇÕES NECESSÁRIAS - POR PRIORIDADE
 
-### NetSuite
+### FASE 0: Criar Tabela de Preços (ANTES da integração)
+
+**NetSuite (Kamila):**
+- [ ] Decidir estrutura: Price Level vs Custom Record vs Middleware (ver Seção 6 do doc 05)
 - [ ] Criar custom fields listados na Seção 5
-- [ ] Criar Saved Search para exportar custos, estoque, fiscal
+- [ ] Criar Saved Search para exportar custos de produtos
 - [ ] Configurar Token Based Authentication (TBA)
-- [ ] Desenvolver SuiteScript (se integração direta) ou RESTlet (se middleware)
 
-### Middleware
-- [ ] Criar tabelas auxiliares (Seções 7.1 a 7.5)
-- [ ] Importar tabela CMED inicial
-- [ ] Popular matriz tributária (input de Thiago)
-- [ ] Desenvolver motor de precificação
-- [ ] Implementar validação PMC
+**Pedro:**
+- [ ] Criar tabela `tbl_tabela_precos` (Seção 7.6) no database
+- [ ] Criar tabela `tbl_laboratorios` (Seção 7.7) com os 4-5 labs principais
+- [ ] Criar tabela `tbl_uf_icms` (Seção 7.8) com alíquotas por UF
+- [ ] Importar tabela CMED inicial (Seção 7.1)
+- [ ] Popular descontos OL por laboratório (Seção 7.2)
 
-### Bionexo
+**Thiago:**
+- [ ] Fornecer matriz tributária completa (NCM × UF)
+- [ ] Validar alíquotas ICMS por UF (Seção 7.8)
+
+**Bruna:**
+- [ ] Listar os 4-5 laboratórios principais (nomes, CNPJs)
+- [ ] Fornecer tabelas de OL de cada laboratório
+- [ ] Validar margens de lucro por categoria de produto
+
+### FASE 1: Motor de Precificação
+
+**Pedro:**
+- [ ] Desenvolver motor de cálculo (Python)
+- [ ] Implementar validação PMC automática
+- [ ] Implementar API para exposição de preços
+- [ ] Testes com dados reais
+
+### FASE 2: Integração com Bionexo
+
+**Pedro + Bionexo:**
 - [ ] Obter credenciais de API (sandbox e produção)
-- [ ] Fazer primeiro teste de autenticação
-- [ ] Validar mapeamento de campos com dados reais
+- [ ] Entender como Bionexo consome preços (push ou pull?)
+- [ ] Implementar sincronização de preços
+- [ ] Testes end-to-end
 
 ---
 
-## RESUMO
+## RESUMO (Atualizado 30/01/2026)
 
-**Chaves de Relacionamento Principais:**
+### Escopo Correto
 
 ```
-COTAÇÃO:
-NetSuite.custbody_bionexo_rfq_id ←→ Bionexo.rfq_id
+A integração é para a BIONEXO ENXERGAR os PREÇOS do NetSuite.
+Direção: NetSuite → Middleware → Bionexo (preços)
+Direção secundária: Bionexo → Middleware → NetSuite (pedidos aceitos)
 
-PEDIDO:
-NetSuite.custbody_bionexo_po_id ←→ Bionexo.po_id
-
-FORNECEDOR:
-NetSuite.custentity_cnpj_limpo ←→ Bionexo.cnpj (sem formatação)
-
-PRODUTO:
-NetSuite.upccode ←→ Bionexo.ean ←→ CMED.ean
-
-REGRAS:
-NetSuite.item.upccode → CMED.ean → PMC
-NetSuite.item.custitem_ncm + Customer.shipstate → Matriz Tributária → ICMS-ST
+PRÉ-REQUISITO: Criar tabela de preços (não existe hoje!)
+Dimensões: Produto × UF (ICMS) × Laboratório (OL)
 ```
+
+### Chaves de Relacionamento Principais
+
+```
+PRODUTO (chave principal):
+NetSuite.upccode ←→ Bionexo.ean ←→ CMED.ean ←→ tbl_tabela_precos.ean
+
+PREÇO (combinação única):
+tbl_tabela_precos: ean + uf_destino + laboratorio_cnpj + data_vigencia
+
+LABORATÓRIO/FORNECEDOR:
+NetSuite.entity.vatregnumber ←→ tbl_laboratorios.cnpj ←→ Bionexo.vendor_cnpj
+
+UF → TRIBUTAÇÃO:
+tbl_uf_icms.uf → tbl_matriz_tributaria (NCM + UF) → ICMS-ST
+tbl_uf_icms.pmc_coluna → tbl_cmed_pmc (ean + vigência) → PMC da UF
+
+PEDIDO (quando hospital aceita):
+Bionexo.po_id ←→ NetSuite.custbody_bionexo_po_id
+```
+
+### Tabelas do Sistema
+
+| # | Tabela | Responsável | Atualização |
+|---|--------|-------------|-------------|
+| 7.1 | `tbl_cmed_pmc` | Pedro (import automático) | Anual (1º abril) |
+| 7.2 | `tbl_operadora_logistica_descontos` | Analistas | Frequente (sem padrão) |
+| 7.3 | `tbl_regras_laboratorios` | Analistas | Sob demanda |
+| 7.4 | `tbl_matriz_tributaria` | Thiago | Quando legislação muda |
+| 7.5 | `tbl_integration_log` | Sistema (automático) | Contínuo |
+| **7.6** | **`tbl_tabela_precos`** | **Motor de precificação** | **Recalcula sob trigger** |
+| 7.7 | `tbl_laboratorios` | Bruna/Analistas | Raramente |
+| 7.8 | `tbl_uf_icms` | Thiago | Quando ICMS muda |
 
 ---
 
 **Próximo documento:** [Especificação Técnica](07-ESPECIFICACAO-TECNICA.md) (após reunião)
 
-**Última atualização:** 2026-01-29
-**Status:** Aguardando reunião para completar campos "A DEFINIR"
+**Última atualização:** 2026-01-30
+**Status:** Atualizado com escopo correto (preços NetSuite → Bionexo)

@@ -1,171 +1,139 @@
-# Projeto de Automação e Análise de Dados - Amoveri Farma
+# Amoveri Farma - Inteligência Comercial
 
-## Sobre o Projeto
-
-Projeto de automação de processos, extração, tratamento e análise de dados para a área comercial da **Amoveri Farma** (antiga Pontual Farmacêutica).
-
-**Responsável:** José Silva
-**Área:** Comercial - Dados e Automação
+**Responsável:** Pedro (José Silva)
+**Área:** Inteligência Comercial - Dados e Automação
 **Início:** Janeiro/2026
+**Última atualização:** 2026-01-30
 
 ---
 
-## Objetivo
+## O Que É Este Projeto
 
-Automatizar rotinas da área comercial através de:
-- Extração de dados de múltiplas fontes (NetSuite, SharePoint, Excel)
-- Tratamento e transformação de dados (ETL)
-- Análise e correlação de bases de dados
-- Criação de dashboards e indicadores
-- Automação de relatórios e processos manuais
+Automação de cotações, precificação e análise de dados da Amoveri Farma (distribuidora farmacêutica).
 
----
+### Problema Atual
+- Cotações respondidas manualmente em múltiplos portais (Bionexo, GT Plan, Apoio Cotações)
+- Sem tabela de preços estruturada no NetSuite
+- Cálculos de ICMS, PMC e descontos OL feitos em planilha/Excel
+- Comunicação com clientes via WhatsApp/email/chat portal sem rastreamento
+- Cada laboratório tem regras e OLs diferentes
 
-## Sistemas Envolvidos
-
-### Sistemas Principais
-- **NetSuite (Oracle)** - ERP principal, fonte de dados de vendas
-- **Microsoft 365** - Excel, Power BI, SharePoint, Teams
-- **Bases de Dados Complementares** - Metas, comissões, tabelas auxiliares
-
-### Acesso e Integrações
-- [ ] Reunião com TI para levantamento de acessos
-- [ ] APIs e credenciais NetSuite (SuiteTalk, SuiteAnalytics Connect)
-- [ ] Permissões SharePoint/OneDrive
-- [ ] Definição de infraestrutura de dados
+### Objetivo
+Criar um middleware local (Python) que:
+1. **Centraliza preços** - Tabela de precificação por Produto x UF x Laboratório
+2. **Integra com portais** - Bionexo, GT Plan, Apoio Cotações
+3. **Automatiza cálculos** - ICMS-ST, PIS/COFINS, PMC CMED, descontos OL
+4. **Alimenta dashboards** - Power BI para tomada de decisão
 
 ---
 
-## Escopo Inicial
+## Plataformas de Cotação
 
-### Fase 1: Levantamento (Em andamento)
-- [x] Estrutura de planejamento criada
-- [ ] Reunião com coordenadora comercial
-- [ ] Reunião com responsável TI
-- [ ] Mapeamento completo de processos
-- [ ] Identificação de fontes de dados
-
-### Fase 2: Tratamento de Dados NetSuite
-**Primeira entrega:** Tratamento do relatório de vendas de janeiro/2026
-
-**Transformações necessárias:**
-1. Remover arredondamento da coluna Q
-   - Fórmula atual: `=ARRED(N2;2) + ARRED(P2;2)`
-   - Ajustar para: `= N2 + P2`
-
-2. Ajustar referência na coluna R
-   - Trocar referência de "P" para "Q"
-   - Aplicar fórmula corrigida
-
-**Campos identificados:**
-- Coluna N: Desconto
-- Coluna P: [A definir na reunião]
-- Coluna Q: ADO TOTAL
-- Coluna R: Pagamento Líquido
-- Coluna S: Pedido
-
-### Fase 3: Pipeline de Dados (Planejado)
-- [ ] Arquitetura de ETL definida
-- [ ] Conexão automatizada com NetSuite
-- [ ] Data Warehouse estruturado
-- [ ] Validação e qualidade de dados
-
-### Fase 4: Dashboards e Análises (Planejado)
-- [ ] Power BI - Dashboard executivo
-- [ ] Análise de vendas por regional
-- [ ] KPIs de performance
-- [ ] Relatórios automatizados
+| Plataforma | Tipo | Status Acesso | Integração |
+|------------|------|---------------|------------|
+| **Bionexo** | Portal principal | Credenciais obtidas | API (reunião segunda) |
+| **GT Plan** | Portal | Credenciais obtidas | Download relatórios |
+| **Apoio Cotações** | Portal | Credenciais obtidas | Download relatórios |
+| **NetSuite** | ERP (custos, estoque) | Credenciais API pendentes | SuiteScript/REST |
+| **WhatsApp/Email** | Comunicação clientes | Funcionando | Manual |
 
 ---
 
-## Estrutura do Repositório
+## Regras de Negócio
+
+1. **PMC CMED** - Preço Maximo ao Consumidor. Atualiza todo 1 de abril. Nunca ultrapassar.
+2. **ICMS por UF** - Varia por NCM + estado destino. Impacta preco final.
+3. **OL Descontos** - Mudam frequentemente. Cada laboratorio tem desconto diferente.
+4. **4-5 Labs principais** - Cada um com regras comerciais especificas.
+5. **Thiago** - Responsavel pela matriz tributaria (NCM x UF).
+
+---
+
+## Arquitetura
+
+```
+PORTAIS DE COTACAO
+  Bionexo | GT Plan | Apoio Cotacoes | WhatsApp/Email
+          |
+          v  API / Scraping / Download CSV
+MIDDLEWARE LOCAL (Python no PC)
+  +--------------------------------------+
+  | Motor de Precificacao                |
+  | Custo + ICMS + Margem - OL <= PMC    |
+  +--------------------------------------+
+  | Database Local (SQLite/DuckDB)       |
+  | - Tabela de Precos (Prod x UF x Lab) |
+  | - CMED/PMC                           |
+  | - Descontos OL                       |
+  | - Regras Labs                        |
+  | - Matriz Tributaria                  |
+  +--------------------------------------+
+          |
+          v
+NETSUITE ERP
+  Custos | Estoque | Pedidos | Fiscal
+          |
+          v
+DASHBOARDS (Power BI)
+  Analises | KPIs | Relatorios
+```
+
+---
+
+## Estrutura do Projeto
 
 ```
 Amoveri-Farma/
-├── README.md                    # Este arquivo
-├── Plano Inicial/              # Documentação de planejamento
-│   ├── 00-INDICE.md            # Índice geral
-│   ├── 01-CHECKLIST-LEVANTAMENTO.md
-│   ├── 02-TEMPLATE-REUNIAO.md
-│   ├── 03-MAPA-PROCESSOS.md
-│   ├── 04-REQUISITOS-TECNICOS.md
-│   └── 05-KPIS-METRICAS.md
-├── Base de Dados/              # Dados brutos (não versionados)
-├── scripts/                    # Scripts de automação (futuro)
-├── etl/                        # Pipeline de dados (futuro)
-└── dashboards/                 # Arquivos Power BI (futuro)
+|-- README.md                      <-- VOCE ESTA AQUI
+|-- PLANO-PROJETO.md               <-- Plano com fases e prioridades
+|
+|-- integrations/                  <-- Integracoes com plataformas
+|   +-- bionexo-netsuite/
+|       |-- INICIO-RAPIDO.md       <-- Guia rapido
+|       +-- docs/                  <-- Documentacao reuniao segunda
+|
+|-- scripts/                       <-- Scripts Python (a desenvolver)
+|-- tests/                         <-- Testes
+|-- logs/                          <-- Logs de execucao
+|
+|-- _archive/                      <-- Docs antigos (referencia)
+|
+|-- .env.example
+|-- requirements.txt
++-- .gitignore
 ```
 
 ---
 
-## Tecnologias Previstas
+## Status (30/01/2026)
 
-**Extração e Tratamento:**
-- Python (pandas, requests, sqlalchemy)
-- NetSuite APIs (SuiteTalk REST/SOAP)
-- Microsoft Graph API
+### Feito
+- [x] Estrutura inicial do projeto
+- [x] Credenciais Bionexo, GT Plan, Apoio obtidas
+- [x] Documentacao para reuniao de segunda preparada
+- [x] Diagramas de fluxo e dicionario de dados criados
 
-**Armazenamento:**
-- SQL Server / PostgreSQL / Azure SQL (a definir)
-- Azure Data Lake / Blob Storage (a definir)
-
-**Visualização:**
-- Power BI
-- Excel (relatórios complementares)
-
-**Automação:**
-- Azure Data Factory / Apache Airflow (a definir)
-- Python scripts + agendamento
+### Proxima Acao
+- [ ] **Segunda 14h: Reuniao com Bionexo** (Gisele + Especialistas)
+- [ ] Criar tabela de precos (nao existe no NetSuite hoje)
+- [ ] Obter credenciais API NetSuite (Kamila)
+- [ ] Obter matriz tributaria (Thiago)
+- [ ] Listar 4-5 labs principais e OLs (Bruna)
 
 ---
 
-## Status Atual
+## Equipe
 
-**Última atualização:** 2026-01-27
-
-### Pendências Críticas
-- [ ] Reunião com coordenadora comercial
-- [ ] Reunião com responsável TI
-- [ ] Definição de acessos e credenciais
-- [ ] Validação de escopo e prioridades
-
-### Próximos Passos
-1. Realizar reuniões de levantamento
-2. Documentar requisitos técnicos completos
-3. Validar tratamento do relatório NetSuite
-4. Definir arquitetura de dados
-5. Criar primeiro pipeline (MVP)
+| Nome | Papel | Responsabilidade |
+|------|-------|-----------------|
+| Pedro | Inteligencia Comercial | Dev, dados, automacao, middleware |
+| Bruna | Comercial | Processos, regras, labs |
+| Kamila | TI NetSuite | Config NetSuite, API, campos |
+| Thiago | Tributacao | Matriz fiscal, ICMS-ST |
+| Analistas | Comercial | Regras labs, OL, cotacoes |
 
 ---
 
-## Documentação Detalhada
+## Documentacao Reuniao (Segunda)
 
-Toda a documentação detalhada está na pasta [Plano Inicial](./Plano%20Inicial/):
-
-- **[00-INDICE](./Plano%20Inicial/00-INDICE.md)** - Índice e visão geral
-- **[01-CHECKLIST-LEVANTAMENTO](./Plano%20Inicial/01-CHECKLIST-LEVANTAMENTO.md)** - Perguntas estruturadas para reuniões
-- **[02-TEMPLATE-REUNIAO](./Plano%20Inicial/02-TEMPLATE-REUNIAO.md)** - Template para documentar reuniões
-- **[03-MAPA-PROCESSOS](./Plano%20Inicial/03-MAPA-PROCESSOS.md)** - Processos identificados
-- **[04-REQUISITOS-TECNICOS](./Plano%20Inicial/04-REQUISITOS-TECNICOS.md)** - Arquitetura e infraestrutura
-- **[05-KPIS-METRICAS](./Plano%20Inicial/05-KPIS-METRICAS.md)** - Indicadores e dashboards
-
----
-
-## Contato
-
-**José Silva**
-Área Comercial - Amoveri Farma
-Foco: Dados, Análise e Automação
-
----
-
-## Notas
-
-- Este é um projeto em fase inicial de levantamento
-- A arquitetura final será definida após reuniões com TI
-- Prioridades serão ajustadas conforme necessidades do negócio
-- Documentação será atualizada continuamente
-
----
-
-*Projeto iniciado em janeiro/2026*
+Ver [integrations/bionexo-netsuite/docs/](integrations/bionexo-netsuite/docs/)

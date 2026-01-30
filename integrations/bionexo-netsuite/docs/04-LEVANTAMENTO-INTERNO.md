@@ -735,6 +735,45 @@ Data: ___/___/___
 
 ## SEÇÃO 11: REGRAS ESPECÍFICAS DO NEGÓCIO FARMACÊUTICO
 
+### ⚠️ ESCOPO CORRETO DA INTEGRAÇÃO (Atualizado 30/01/2026)
+
+**Conversa com Bruna (Comercial) revelou:**
+- A integração Bionexo ↔ NetSuite é para a **BIONEXO ENXERGAR os PREÇOS** do NetSuite
+- Direção principal: **NetSuite → Bionexo (preços)**
+- **NÃO temos tabela de preços no NetSuite hoje** - precisa ser criada
+- Precisa tabela por **ESTADO (UF)** - ICMS diferente por estado
+- Precisa tabela por **LABORATÓRIO/FORNECEDOR** - 4-5 principais que possuem OL com descontos diferentes
+- Amoveri é **distribuidora**: vende para hospitais/clínicas via Bionexo
+- Os 4-5 são **laboratórios/fornecedores** (não clientes compradores)
+
+### 11.0 PRÉ-REQUISITO: Criar Tabela de Preços no NetSuite
+
+**Problema:**
+```
+Não temos tabela de preços estruturada no NetSuite.
+Sem tabela = impossível integrar com Bionexo.
+ESTA É A PRIMEIRA COISA A RESOLVER.
+```
+
+**O que precisa ser criado:**
+- [ ] Tabela de preços por **ESTADO (UF)** - 27 estados, ICMS diferente
+- [ ] Tabela de preços por **LABORATÓRIO** - 4-5 fornecedores principais
+- [ ] Cada combinação **Produto × UF × Laboratório** = preço diferente
+- [ ] Validação contra **PMC CMED** em cada preço
+
+**Dimensão:**
+```
+Total de preços = N_produtos × N_ufs × N_laboratorios
+Exemplo: 500 produtos × 27 UFs × 5 labs = 67.500 preços
+```
+
+**Discutir com Kamila (NetSuite):**
+- [ ] Opção A: Price Level por UF (nativo do NetSuite)
+- [ ] Opção B: Custom Record (mais flexível)
+- [ ] Opção C: Database no Middleware (independente do NetSuite)
+
+**Ver detalhes:** [Diagramas - Seção 6](05-DIAGRAMAS-FLUXOS.md) e [Dicionário - Seção 7.6](06-DICIONARIO-DADOS.md)
+
 ### 11.1 Informações que a Bionexo JÁ POSSUI
 **Responsável:** Validar com Bionexo na reunião
 
@@ -746,6 +785,8 @@ A Bionexo já rastreia e possui as seguintes informações:
 - [ ] Podemos acessar esses dados via API ou dashboard?
 - [ ] Há outras métricas/analytics disponíveis?
 - [ ] Vocês fazem benchmark entre clientes?
+- [ ] **NOVA:** Como vocês recebem tabela de preços dos distribuidores? (push/pull?)
+- [ ] **NOVA:** Vocês suportam preço diferente por UF do hospital?
 
 ### 11.2 Regras Especiais de Laboratórios
 

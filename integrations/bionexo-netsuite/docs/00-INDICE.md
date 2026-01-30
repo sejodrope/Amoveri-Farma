@@ -149,11 +149,12 @@ R: Sim! São apenas templates. Adapte conforme necessário.
 
 ---
 
-## Atalhos Úteis
+## Atalhos Uteis
 
 **Links internos:**
 - [README Principal](../README.md)
-- [Guia de Implementação Geral](../../../GUIA-IMPLEMENTACAO.md)
+- [Plano do Projeto](../../../PLANO-PROJETO.md)
+- [README Geral do Projeto](../../../README.md)
 
 **Recursos externos:**
 - [NetSuite Help Center](https://system.netsuite.com/app/help/helpcenter.nl)
@@ -163,18 +164,19 @@ R: Sim! São apenas templates. Adapte conforme necessário.
 
 ## Status dos Documentos
 
-| Documento | Status | Última Atualização |
+| Documento | Status | Ultima Atualizacao |
 |-----------|--------|-------------------|
-| 00-INDICE.md | ✅ Completo | 2026-01-29 |
-| 01-PREPARACAO-REUNIAO.md | ✅ Completo | 2026-01-29 |
-| 02-CHECKLIST-TECNICO-API.md | ✅ Completo | 2026-01-29 |
-| 03-TEMPLATE-ATA-REUNIAO.md | ✅ Completo | 2026-01-29 |
-| 04-LEVANTAMENTO-INTERNO.md | 🔄 A Preencher | 2026-01-29 |
-| 05-DIAGRAMAS-FLUXOS.md | ✅ Completo | 2026-01-29 |
-| 06-DICIONARIO-DADOS.md | 🔄 A Completar (reunião) | 2026-01-29 |
-| 07-ESPECIFICACAO-TECNICA.md | ⏳ Aguardando Reunião | - |
+| 00-INDICE.md | Completo | 2026-01-30 |
+| 01-PREPARACAO-REUNIAO.md | Completo | 2026-01-29 |
+| 02-CHECKLIST-TECNICO-API.md | Completo | 2026-01-29 |
+| 03-TEMPLATE-ATA-REUNIAO.md | Completo | 2026-01-29 |
+| 04-LEVANTAMENTO-INTERNO.md | A Preencher | 2026-01-29 |
+| 05-DIAGRAMAS-FLUXOS.md | Atualizado (escopo corrigido) | 2026-01-30 |
+| 06-DICIONARIO-DADOS.md | A Completar (reuniao) | 2026-01-30 |
+| RESUMO-EXECUTIVO.md | Atualizado (escopo corrigido) | 2026-01-30 |
+| GUIA-VISUAL-DIAGRAMAS.md | Completo | 2026-01-29 |
 
 ---
 
-**Última atualização:** 2026-01-29
-**Mantido por:** Pedro (Inteligência Comercial)
+**Ultima atualizacao:** 2026-01-30
+**Mantido por:** Pedro (Inteligencia Comercial)
